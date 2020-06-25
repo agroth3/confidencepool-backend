@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+model User {
+  id              Int             @default(autoincrement()) @id
+  role            String        
+  email           String          @unique
+  password        String        
+  name            String?       
+  leagues         League[]        @relation(references: [id])
+  updatedAt       DateTime        @updatedAt
+}
+
+model League {
+  id              Int             @default(autoincrement()) @id
+  shortId         String          @unique
+  title           String      
+  password        String      
+  limit           Int?      
+  active          Boolean         @default(true)
+  users           User[]          @relation(references: [id])
+  createdAt       DateTime        @default(now())
+  createdBy       User            @relation(name:"CreateBy", fields: [createdByUserId], references: [id])
+  createdByUserId Int  
+  updatedAt       DateTime        @updatedAt
+}
